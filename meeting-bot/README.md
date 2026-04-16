@@ -1,32 +1,39 @@
-# 議事録自動化ツール（meeting-bot）
+# 🎙️ meeting-bot
 
-## 概要
-会議音声を自動で文字起こし・要約してGoogle Chatに投稿するツール
+会議音声を自動で文字起こし・要約し、Google Chatに投稿するツールです。
 
-## 使用技術
-- OpenAI Whisper API（文字起こし）
-- OpenAI GPT-4o-mini（要約）
-- Google Chat Webhook（投稿）
-- Python 3.11
+## できること
+
+1. 音声ファイル（.m4a / .mp4）を入れる
+2. ターミナルでコマンドを実行する
+3. 議事録がGoogle Chatに自動投稿される
+
+## 必要なもの
+
+- Mac（またはLinux）
+- Python 3.8以上
+- OpenAI APIキー（文字起こし・要約に使用）
+- Google Chat Webhook URL（投稿先）
 
 ## セットアップ手順
-1. Python 3.11をインストール
-2. 必要ライブラリをインストール
-3. .envファイルを作成してAPIキーを設定
-4. watch.pyを起動
 
-## 使い方
-ファイル名のルール：20260414_会議名_参加者.m4a
-meeting-botフォルダに音声ファイルを入れるだけで自動処理される
+### 1. このリポジトリを取得する
 
-## ファイル構成
-- transcribe.py：メインスクリプト
-- watch.py：フォルダ監視スクリプト
-- .env：APIキー管理（GitHubにはpushしない）
+```bash
+git clone https://github.com/habu0801-lgtm/ai-consul-tools.git
+cd ai-consul-tools/meeting-bot
+```
 
-## 対応音声形式
-m4a、mp4
+### 2. Pythonライブラリをインストールする
 
-## 注意事項
-- .envファイルは絶対にGitHubにpushしない
-- APIキーは.envで管理する
+```bash
+pip install requests python-dotenv openai
+```
+
+### 3. .envファイルを作成する
+
+```bash
+cp .env.example .env
+```
+
+`.env` をテキストエディタで開いて以下を入力：

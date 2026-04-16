@@ -7,8 +7,9 @@ import sys
 import unicodedata
 import urllib.error
 import urllib.request
+from datetime import datetime
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Tuple
 
 import requests
 from dotenv import load_dotenv
@@ -40,6 +41,12 @@ def require_env(name: str) -> str:
     return value
 
 
+def get_file_datetime(audio_path: Path) -> str:
+    """ファイルの更新日時を返す（例: 2026/04/16 14:30）。"""
+    mtime = audio_path.stat().st_mtime
+    return datetime.fromtimestamp(mtime).strftime("%Y/%m/%d %H:%M")
+
+
 def transcribe_audio(audio_path: Path) -> str:
     api_key = os.environ.get("OPENAI_API_KEY")
     with open(audio_path, "rb") as f:
@@ -53,37 +60,56 @@ def transcribe_audio(audio_path: Path) -> str:
     return response.json()["text"]
 
 
-def parse_meeting_info_from_filename(
-    audio_path: Path,
-) -> Tuple[Optional[str], Optional[str], Optional[str]]:
-    stem = audio_path.stem
-    parts = stem.split("_")
+def extract_meeting_info_with_ai(transcript_text: str) -> Tuple[str, str]:
+    """文字起こしからタイトルと参加者をAIで抽出する。"""
+    prompt = (
+        "以下の会議の文字起こしを読んで、次の2つを日本語で答えてください。\n"
+        "必ずJSON形式のみで返してください（説明文は不要）。\n\n"
+        "1. title: この会議にふさわしい簡潔なタイトル（20文字以内）\n"
+        "2. participants: 文字起こしに登場する参加者名の一覧（読み取れない場合は「不明」）\n\n"
+        '例: {"title": "週次定例ミーティング", "participants": "田中太郎、鈴木花子"}\n\n'
+        f"--- 文字起こし ---\n{transcript_text}\n"
+    )
+    client = OpenAI()
+    try:
+        response = client.chat.completions.create(
+            model=SUMMARY_MODEL,
+            temperature=0.0,
+            messages=[{"role": "user", "content": prompt}],
+            response_format={"type": "json_object"},
+        )
+    except Exception as exc:
+        sys.exit(f"ミーティング情報の抽出に失敗しました: {exc}")
 
-    meeting_date = None
-    meeting_title = None
-    participants = None
-
-    if len(parts) >= 1 and len(parts[0]) == 8 and parts[0].isdigit():
-        meeting_date = f"{parts[0][0:4]}/{parts[0][4:6]}/{parts[0][6:8]}"
-    if len(parts) >= 2 and parts[1].strip():
-        meeting_title = parts[1].strip()
-    if len(parts) >= 3:
-        participants_text = "_".join(parts[2:]).strip()
-        if participants_text:
-            participants = participants_text
-
-    return meeting_date, meeting_title, participants
+    content = response.choices[0].message.content or "{}"
+    data = json.loads(content)
+    title = data.get("title", "（タイトル不明）")
+    participants = data.get("participants", "（参加者不明）")
+    return title, participants
 
 
-def fill_missing_meeting_info(
-    meeting_date: Optional[str], meeting_title: Optional[str], participants: Optional[str]
+def confirm_meeting_info(
+    meeting_date: str, meeting_title: str, participants: str
 ) -> Tuple[str, str, str]:
-    if not meeting_date:
-        meeting_date = input("日時を入力してください（例: 2026/04/14）：").strip()
-    if not meeting_title:
-        meeting_title = input("会議名を入力してください：").strip()
-    if not participants:
-        participants = input("参加者を入力してください：").strip()
+    """抽出した情報をユーザーに確認し、必要なら修正する。"""
+    print("\n[確認] 自動抽出した情報:")
+    print(f"  日時:     {meeting_date}")
+    print(f"  参加者:   {participants}")
+    print(f"  タイトル: {meeting_title}")
+
+    answer = input("\nこの内容で合ってますか？（y / 変更する場合はn）: ").strip().lower()
+
+    if answer != "y":
+        new_date = input(f"  日時 [{meeting_date}]（変更なければEnter）: ").strip()
+        new_participants = input(f"  参加者 [{participants}]（変更なければEnter）: ").strip()
+        new_title = input(f"  タイトル [{meeting_title}]（変更なければEnter）: ").strip()
+
+        if new_date:
+            meeting_date = new_date
+        if new_participants:
+            participants = new_participants
+        if new_title:
+            meeting_title = new_title
 
     return meeting_date, meeting_title, participants
 
@@ -168,16 +194,29 @@ def main() -> None:
         sys.exit("使い方: python3 transcribe.py <音声ファイルパス>")
 
     audio_path = resolve_audio_path(sys.argv[1])
-    meeting_date, meeting_title, participants = parse_meeting_info_from_filename(audio_path)
-    meeting_date, meeting_title, participants = fill_missing_meeting_info(
+
+    # Step 1: ファイルの更新日時から日時を自動取得
+    meeting_date = get_file_datetime(audio_path)
+
+    # Step 2: 文字起こし
+    print("文字起こし中...")
+    transcript_text = transcribe_audio(audio_path)
+
+    # Step 3: AIでタイトルと参加者を自動抽出
+    print("タイトル・参加者を抽出中...")
+    meeting_title, participants = extract_meeting_info_with_ai(transcript_text)
+
+    # Step 4: ユーザーに確認・修正
+    meeting_date, meeting_title, participants = confirm_meeting_info(
         meeting_date, meeting_title, participants
     )
 
-    transcript_text = transcribe_audio(audio_path)
+    # Step 5: 要約してGoogle Chatに投稿
+    print("\n要約中...")
     summary_text = summarize_with_gpt(transcript_text, meeting_date, meeting_title, participants)
     post_to_google_chat(summary_text, webhook_url)
 
-    print("=== 文字起こし結果 ===")
+    print("\n=== 文字起こし結果 ===")
     print(transcript_text)
     print("\n=== 要約結果 ===")
     print(summary_text)

@@ -88,31 +88,6 @@ def extract_meeting_info_with_ai(transcript_text: str) -> Tuple[str, str]:
     return title, participants
 
 
-def confirm_meeting_info(
-    meeting_date: str, meeting_title: str, participants: str
-) -> Tuple[str, str, str]:
-    """抽出した情報をユーザーに確認し、必要なら修正する。"""
-    print("\n[確認] 自動抽出した情報:")
-    print(f"  日時:     {meeting_date}")
-    print(f"  参加者:   {participants}")
-    print(f"  タイトル: {meeting_title}")
-
-    answer = input("\nこの内容で合ってますか？（y / 変更する場合はn）: ").strip().lower()
-
-    if answer != "y":
-        new_date = input(f"  日時 [{meeting_date}]（変更なければEnter）: ").strip()
-        new_participants = input(f"  参加者 [{participants}]（変更なければEnter）: ").strip()
-        new_title = input(f"  タイトル [{meeting_title}]（変更なければEnter）: ").strip()
-
-        if new_date:
-            meeting_date = new_date
-        if new_participants:
-            participants = new_participants
-        if new_title:
-            meeting_title = new_title
-
-    return meeting_date, meeting_title, participants
-
 
 def summarize_with_gpt(
     transcript_text: str, meeting_date: str, meeting_title: str, participants: str
@@ -206,12 +181,7 @@ def main() -> None:
     print("タイトル・参加者を抽出中...")
     meeting_title, participants = extract_meeting_info_with_ai(transcript_text)
 
-    # Step 4: ユーザーに確認・修正
-    meeting_date, meeting_title, participants = confirm_meeting_info(
-        meeting_date, meeting_title, participants
-    )
-
-    # Step 5: 要約してGoogle Chatに投稿
+    # Step 4: 要約してGoogle Chatに投稿
     print("\n要約中...")
     summary_text = summarize_with_gpt(transcript_text, meeting_date, meeting_title, participants)
     post_to_google_chat(summary_text, webhook_url)

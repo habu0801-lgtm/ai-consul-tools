@@ -1,28 +1,84 @@
-import streamlit as st
-import subprocess
+import os
+import sys
 from pathlib import Path
 
-st.title("会議Bot ダッシュボード")
-st.header("音声ファイルをアップロード")
-uploaded_file = st.file_uploader("音声ファイルを選択（m4a / mp4）", type=["m4a", "mp4"])
+import streamlit as st
+from dotenv import load_dotenv
 
-if uploaded_file is not None:
-    save_path = Path.home() / "Desktop" / "meeting-bot" / uploaded_file.name
-    with open(save_path, "wb") as f:
-        f.write(uploaded_file.getbuffer())
-    st.success(f"アップロード完了：{uploaded_file.name}")
-    st.header("文字起こし・要約・投稿")
-    if st.button("処理を実行する"):
-        with st.spinner("処理中..."):
-            result = subprocess.run(
-                ["/usr/local/bin/python3.11", "transcribe.py", str(save_path)],
-                cwd=str(Path.home() / "Desktop" / "meeting-bot"),
-                capture_output=True,
-                text=True
-            )
-        if result.returncode == 0:
-            st.success("処理完了！Google Chatに投稿しました。")
-            st.text_area("出力ログ", result.stdout, height=300)
-        else:
-            st.error("エラーが発生しました")
-            st.text_area("エラーログ", result.stderr, height=300)
+# .envを読み込む
+MEETING_BOT_DIR = Path.home() / "meeting-bot"
+load_dotenv(MEETING_BOT_DIR / ".env", override=True)
+
+# transcribe.pyの関数をインポート
+sys.path.insert(0, str(MEETING_BOT_DIR))
+from transcribe import (
+    transcribe_audio,
+    extract_meeting_info_with_ai,
+    get_file_datetime,
+    summarize_with_gpt,
+    post_to_google_chat,
+)
+
+st.title("会議Bot ダッシュボード")
+
+# --- Stage 1: アップロード ---
+if "stage" not in st.session_state:
+    st.session_state.stage = "upload"
+
+if st.session_state.stage == "upload":
+    st.header("音声ファイルをアップロード")
+    uploaded_file = st.file_uploader("音声ファイルを選択（m4a / mp4）", type=["m4a", "mp4"])
+
+    if uploaded_file is not None:
+        if st.button("文字起こし・情報抽出を開始"):
+            save_path = MEETING_BOT_DIR / uploaded_file.name
+            with open(save_path, "wb") as f:
+                f.write(uploaded_file.getbuffer())
+
+            with st.spinner("文字起こし中..."):
+                transcript = transcribe_audio(save_path)
+
+            with st.spinner("タイトル・参加者を抽出中..."):
+                meeting_title, participants = extract_meeting_info_with_ai(transcript)
+                meeting_date = get_file_datetime(save_path)
+
+            st.session_state.transcript = transcript
+            st.session_state.meeting_date = meeting_date
+            st.session_state.meeting_title = meeting_title
+            st.session_state.participants = participants
+            st.session_state.audio_path = str(save_path)
+            st.session_state.stage = "confirm"
+            st.rerun()
+
+# --- Stage 2: 確認・編集・投稿 ---
+elif st.session_state.stage == "confirm":
+    st.header("抽出された情報を確認・編集してください")
+
+    meeting_date = st.text_input("日時", value=st.session_state.meeting_date)
+    participants = st.text_input("参加者", value=st.session_state.participants)
+    meeting_title = st.text_input("タイトル", value=st.session_state.meeting_title)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("この内容で投稿する", type="primary"):
+            with st.spinner("議事録を作成中..."):
+                summary = summarize_with_gpt(
+                    st.session_state.transcript,
+                    meeting_date,
+                    meeting_title,
+                    participants,
+                )
+            webhook_url = os.environ.get("GOOGLE_CHAT_WEBHOOK")
+            post_to_google_chat(summary, webhook_url)
+            st.success("Google Chatに投稿しました！")
+            st.subheader("議事録")
+            st.markdown(summary)
+            if st.button("新しいファイルを処理する"):
+                st.session_state.stage = "upload"
+                st.rerun()
+
+    with col2:
+        if st.button("やり直す"):
+            st.session_state.stage = "upload"
+            st.rerun()

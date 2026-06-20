@@ -1,6 +1,22 @@
+# 環境変数（APIキーが含まれるため絶対にコミットしない）
 .env
-.DS_Store
+.env.*
+
+# 音声・動画ファイル
 *.m4a
-*.mp3
 *.mp4
+*.wav
+*.mp3
+
+# 処理済みフォルダ
 processed/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# macOS
+.DS_Store

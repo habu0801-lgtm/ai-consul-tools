@@ -88,31 +88,6 @@ def extract_meeting_info_with_ai(transcript_text: str) -> Tuple[str, str]:
     return title, participants
 
 
-def confirm_meeting_info(
-    meeting_date: str, meeting_title: str, participants: str
-) -> Tuple[str, str, str]:
-    """抽出した情報をユーザーに確認し、必要なら修正する。"""
-    print("\n[確認] 自動抽出した情報:")
-    print(f"  日時:     {meeting_date}")
-    print(f"  参加者:   {participants}")
-    print(f"  タイトル: {meeting_title}")
-
-    answer = input("\nこの内容で合ってますか？（y / 変更する場合はn）: ").strip().lower()
-
-    if answer != "y":
-        new_date = input(f"  日時 [{meeting_date}]（変更なければEnter）: ").strip()
-        new_participants = input(f"  参加者 [{participants}]（変更なければEnter）: ").strip()
-        new_title = input(f"  タイトル [{meeting_title}]（変更なければEnter）: ").strip()
-
-        if new_date:
-            meeting_date = new_date
-        if new_participants:
-            participants = new_participants
-        if new_title:
-            meeting_title = new_title
-
-    return meeting_date, meeting_title, participants
-
 
 def summarize_with_gpt(
     transcript_text: str, meeting_date: str, meeting_title: str, participants: str
@@ -130,22 +105,22 @@ def summarize_with_gpt(
         "3. 会話の文脈から、[会議の目的]や[アジェンダ]を推測して整理してください。\n"
         "4. [決定事項]と[Next Action]は最も重要です。必ず抽出してください。Next Actionは「誰が」「何を」「いつまでに」やるのかを明確に箇条書きにしてください。明言されていない場合は「要確認」としてください。\n"
         "5. 結論に至った理由や、対立した意見、懸念点などの[議論の過程]も、箇条書きで簡潔にまとめてください。\n"
-        "6. 出力はMarkdown形式で行ってください。\n\n"
+        "6. 出力はプレーンテキスト形式で行ってください。記号は「・」「【】」「→」のみ使用し、#や*などのMarkdown記法は使わないでください。\n\n"
         "# 出力フォーマット\n"
-        "## 【会議名】（※内容から適切なタイトルを推測してください）\n"
-        "* **日時：** （※わかる範囲で記載）\n"
-        "* **参加者：** （※会話に出てくる登場人物を記載）\n"
-        "* **会議の目的・ゴール：**\n\n"
-        "## 1. 決定事項【最重要】\n"
-        "* （箇条書きで簡潔に）\n\n"
-        "## 2. Next Action（タスク）【最重要】\n"
-        "* [担当者名]：[タスク内容]（期限：[いつまで]）\n\n"
-        "## 3. アジェンダと議論の過程\n"
-        "### アジェンダ1：（議題名）\n"
-        "* **背景・前提：**\n"
-        "* **主な議論・懸念点：**\n\n"
-        "## 4. 保留事項・次回持ち越し\n"
-        "* （今回決まらなかったこと、次回までの宿題など）\n\n"
+        "【会議名】（※内容から適切なタイトルを推測してください）\n"
+        "日時：（※わかる範囲で記載）\n"
+        "参加者：（※会話に出てくる登場人物を記載）\n"
+        "会議の目的・ゴール：\n\n"
+        "【1. 決定事項】\n"
+        "・（箇条書きで簡潔に）\n\n"
+        "【2. Next Action（タスク）】\n"
+        "・[担当者名]：[タスク内容]（期限：[いつまで]）\n\n"
+        "【3. アジェンダと議論の過程】\n"
+        "アジェンダ1：（議題名）\n"
+        "・背景・前提：\n"
+        "・主な議論・懸念点：\n\n"
+        "【4. 保留事項・次回持ち越し】\n"
+        "・（今回決まらなかったこと、次回までの宿題など）\n\n"
         f"--- 文字起こし ---\n{transcript_text}\n"
     )
     client = OpenAI()
@@ -206,12 +181,7 @@ def main() -> None:
     print("タイトル・参加者を抽出中...")
     meeting_title, participants = extract_meeting_info_with_ai(transcript_text)
 
-    # Step 4: ユーザーに確認・修正
-    meeting_date, meeting_title, participants = confirm_meeting_info(
-        meeting_date, meeting_title, participants
-    )
-
-    # Step 5: 要約してGoogle Chatに投稿
+    # Step 4: 要約してGoogle Chatに投稿
     print("\n要約中...")
     summary_text = summarize_with_gpt(transcript_text, meeting_date, meeting_title, participants)
     post_to_google_chat(summary_text, webhook_url)

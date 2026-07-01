@@ -1,16 +1,12 @@
 import os
-import sys
 from pathlib import Path
 
 import streamlit as st
 from dotenv import load_dotenv
 
-# .envを読み込む
-MEETING_BOT_DIR = Path.home() / "meeting-bot"
-load_dotenv(MEETING_BOT_DIR / ".env", override=True)
+# .envを読み込む（このファイルと同じディレクトリ）
+load_dotenv(Path(__file__).resolve().parent / ".env", override=True)
 
-# transcribe.pyの関数をインポート
-sys.path.insert(0, str(MEETING_BOT_DIR))
 from transcribe import (
     transcribe_audio,
     extract_meeting_info_with_ai,
@@ -21,7 +17,6 @@ from transcribe import (
 
 st.title("会議Bot ダッシュボード")
 
-# --- Stage 1: アップロード ---
 if "stage" not in st.session_state:
     st.session_state.stage = "upload"
 
@@ -31,7 +26,7 @@ if st.session_state.stage == "upload":
 
     if uploaded_file is not None:
         if st.button("文字起こし・情報抽出を開始"):
-            save_path = MEETING_BOT_DIR / uploaded_file.name
+            save_path = Path(__file__).resolve().parent / uploaded_file.name
             with open(save_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
 
@@ -50,7 +45,6 @@ if st.session_state.stage == "upload":
             st.session_state.stage = "confirm"
             st.rerun()
 
-# --- Stage 2: 確認・編集・投稿 ---
 elif st.session_state.stage == "confirm":
     st.header("抽出された情報を確認・編集してください")
 

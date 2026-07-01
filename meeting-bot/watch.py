@@ -9,10 +9,10 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-WATCH_DIR = Path.home() / "meeting-bot"
+WATCH_DIR = Path(__file__).resolve().parent
 PROCESSED_DIR = WATCH_DIR / "processed"
 TARGET_EXTENSIONS = {".m4a", ".mp4"}
-TRANSCRIBE_COMMAND = ["/usr/local/bin/python3.11", "transcribe.py"]
+TRANSCRIBE_COMMAND = [sys.executable, "transcribe.py"]
 POLL_INTERVAL_SECONDS = 3
 
 
@@ -40,9 +40,6 @@ def process_file(file_path: Path) -> bool:
 
 
 def main() -> None:
-    if not WATCH_DIR.exists():
-        sys.exit(f"監視フォルダが見つかりません: {WATCH_DIR}")
-
     load_dotenv(WATCH_DIR / ".env", override=True)
     known_files = list_target_files()
     print(f"[INFO] 監視開始: {WATCH_DIR}")

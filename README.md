@@ -36,6 +36,17 @@ AIコンサルタント・土生が実際に構築・運用しているAI活用�
 
 詳細は [kpi-reporter/README.md](kpi-reporter/README.md) を参照。
 
+### 🗺️ tokyo-art-events
+
+東京都内の美術館の展覧会情報を自動収集し、地図付きで一覧できる公開Webサイト。
+
+- 13館の展覧会情報を毎日自動収集（GitHub Actions）
+- Google Mapsで全館の場所・開催状況を確認可能
+- 開催状況フィルタ・検索に対応
+
+公開サイト: https://tokyo-art-events.vercel.app
+詳細は [tokyo-art-events/README.md](tokyo-art-events/README.md) を参照。
+
 ## 今後追加予定
 
 - **sns-copy-generator**：商品写真からSNS投稿文を自動生成

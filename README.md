@@ -47,10 +47,6 @@
 公開サイト: https://tokyo-art-events.vercel.app
 詳細は [tokyo-art-events/README.md](tokyo-art-events/README.md) を参照。
 
-## 今後追加予定
-
-- **sns-copy-generator**：商品写真からSNS投稿文を自動生成
-
 ## 対象
 
 - 会議録作成・共有に時間がかかっている方

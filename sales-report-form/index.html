@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>実績報告フォーム</title>
+  <style>
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f1f5f9; margin: 0; padding: 10px; color: #1e293b; }
+    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    h2 { text-align: center; font-size: 1.3rem; margin-top: 0; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+    .form-group { margin-bottom: 18px; background: #fafafa; padding: 12px; border-radius: 8px; border: 1px solid #f1f5f9; }
+    label.title { font-weight: bold; display: block; margin-bottom: 10px; font-size: 0.95rem; border-left: 4px solid #64748b; padding-left: 8px; }
+    select, input[type="number"] { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
+    .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .checkbox-label { display: flex; align-items: center; background: #fff; padding: 10px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; border: 1px solid #e2e8f0; transition: background 0.15s, border-color 0.15s; }
+    .checkbox-label input { margin-right: 8px; transform: scale(1.15); accent-color: #2563eb; }
+    .checkbox-label.checked { background: #eff6ff; border-color: #2563eb; font-weight: bold; }
+    .title-a { border-color: #f97316 !important; }
+    .title-b { border-color: #ec4899 !important; }
+    .title-option { border-color: #eab308 !important; }
+    .title-rate { border-color: #10b981 !important; }
+    .number-inline { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; grid-column: span 2; }
+    .number-inline span { font-size: 0.9rem; font-weight: bold; }
+    .number-inline input { width: 70px; padding: 8px; text-align: center; }
+    #summary { font-size: 0.85rem; color: #475569; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 10px; margin-bottom: 10px; min-height: 1.2em; }
+    #summary strong { color: #2563eb; }
+    button { width: 100%; padding: 15px; background-color: #2563eb; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 4px; }
+    button:disabled { background-color: #cbd5e1; }
+    #message { text-align: center; margin-top: 15px; font-weight: bold; font-size: 1rem; }
+    .success { color: #16a34a; background: #f0fdf4; padding: 10px; border-radius: 6px; }
+    .error { color: #dc2626; background: #fef2f2; padding: 10px; border-radius: 6px; }
+    .footer { text-align: center; font-size: 0.7rem; color: #94a3b8; margin-top: 12px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>接客実績 報告フォーム</h2>
+  <form id="reportForm" onsubmit="submitForm(event)">
+
+    <!-- スタッフ名 -->
+    <div class="form-group">
+      <label class="title">担当スタッフ</label>
+      <select name="staff" id="staffSelect" required>
+        <option value="">選択してください</option>
+        <option value="スタッフA">スタッフA</option>
+        <option value="スタッフB">スタッフB</option>
+        <option value="スタッフC">スタッフC</option>
+        <option value="スタッフD">スタッフD</option>
+      </select>
+    </div>
+
+    <!-- カテゴリA -->
+    <div class="form-group">
+      <label class="title title-a">カテゴリA</label>
+      <div class="checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" name="item" value="商品A-1"> 商品A-1</label>
+        <label class="checkbox-label"><input type="checkbox" name="item" value="商品A-2"> 商品A-2</label>
+        <label class="checkbox-label"><input type="checkbox" name="item" value="商品A-3"> 商品A-3</label>
+      </div>
+    </div>
+
+    <!-- カテゴリB -->
+    <div class="form-group">
+      <label class="title title-b">カテゴリB</label>
+      <div class="checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" name="item" value="商品B-1"> 商品B-1</label>
+        <label class="checkbox-label"><input type="checkbox" name="item" value="商品B-2"> 商品B-2</label>
+        <label class="checkbox-label"><input type="checkbox" name="item" value="商品B-3"> 商品B-3</label>
+      </div>
+    </div>
+
+    <!-- オプション商材 + 1接客あたり複数件ありうる項目は数値入力にする例 -->
+    <div class="form-group">
+      <label class="title title-option">オプション商材</label>
+      <div class="checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" name="item" value="オプション-1"> オプション-1</label>
+        <label class="checkbox-label"><input type="checkbox" name="item" value="オプション-2"> オプション-2</label>
+        <label class="checkbox-label"><input type="checkbox" name="item" value="オプション-3"> オプション-3</label>
+        <div class="number-inline">
+          <span>追加商材A</span>
+          <input type="number" name="countA" min="0" max="3" value="0" inputmode="numeric">
+        </div>
+        <div class="number-inline">
+          <span>追加商材B</span>
+          <input type="number" name="countB" min="0" max="3" value="0" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+
+    <!-- 実施率を測りたい項目の例（実施数・対象数のペア） -->
+    <div class="form-group">
+      <label class="title title-rate">施策の実施率（実施・対象）</label>
+      <div class="checkbox-grid">
+        <label class="checkbox-label"><input type="checkbox" name="item" value="施策C(実施)"> 施策C(実施)</label>
+        <label class="checkbox-label"><input type="checkbox" name="item" value="施策C(対象)"> 施策C(対象)</label>
+      </div>
+    </div>
+
+    <!-- 金額 -->
+    <div class="form-group">
+      <label class="title">金額（円）</label>
+      <input type="number" name="amount" min="0" inputmode="numeric" placeholder="例: 4400（ない場合は空欄）">
+    </div>
+
+    <!-- 送信前サマリー -->
+    <div id="summary">選択中: なし</div>
+
+    <button type="submit" id="submitBtn">実績を送信する</button>
+    <div id="message"></div>
+  </form>
+  <div class="footer">実績報告フォーム テンプレート</div>
+</div>
+
+<script>
+  var form = document.getElementById('reportForm');
+  var staffSelect = document.getElementById('staffSelect');
+  var summary = document.getElementById('summary');
+
+  // 前回選んだスタッフ名を記憶（毎回選び直す手間と選び間違いを減らす）
+  try {
+    var saved = localStorage.getItem('reportStaff');
+    if (saved) staffSelect.value = saved;
+  } catch (e) {}
+  staffSelect.addEventListener('change', function() {
+    try { localStorage.setItem('reportStaff', staffSelect.value); } catch (e) {}
+  });
+
+  // チェック状態の見た目切り替え＋サマリー更新
+  form.addEventListener('change', updateSummary);
+  form.addEventListener('input', updateSummary);
+
+  function updateSummary() {
+    var parts = [];
+    var boxes = form.querySelectorAll('input[name="item"]');
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].closest('.checkbox-label').classList.toggle('checked', boxes[i].checked);
+      if (boxes[i].checked) parts.push(boxes[i].value);
+    }
+    var countA = parseInt(form.countA.value) || 0;
+    var countB = parseInt(form.countB.value) || 0;
+    var amount = parseInt(form.amount.value) || 0;
+    if (countA > 0) parts.push('追加商材A×' + countA);
+    if (countB > 0) parts.push('追加商材B×' + countB);
+    if (amount > 0) parts.push('金額 ' + amount.toLocaleString() + '円');
+    summary.innerHTML = parts.length
+      ? '選択中 <strong>' + parts.length + '件</strong>: ' + parts.map(escapeHtml).join('、')
+      : '選択中: なし';
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function submitForm(event) {
+    event.preventDefault();
+    var btn = document.getElementById('submitBtn');
+    var msg = document.getElementById('message');
+
+    // 空送信ガード（クライアント側）
+    var hasItem = form.querySelectorAll('input[name="item"]:checked').length > 0;
+    var hasNumber = (parseInt(form.countA.value) || 0) > 0
+                 || (parseInt(form.countB.value) || 0) > 0
+                 || (parseInt(form.amount.value) || 0) > 0;
+    if (!hasItem && !hasNumber) {
+      msg.innerText = '獲得項目が1つも選ばれていません。';
+      msg.className = 'error';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = '送信中...';
+    msg.innerText = '';
+    msg.className = '';
+
+    google.script.run
+      .withSuccessHandler(function(response) {
+        msg.innerText = response.message;
+        msg.className = response.success ? 'success' : 'error';
+        if (response.success) {
+          var keepStaff = staffSelect.value;
+          form.reset();
+          staffSelect.value = keepStaff;  // スタッフ名だけ保持
+          updateSummary();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(function() {
+            if (msg.className === 'success') { msg.innerText = ''; msg.className = ''; }
+          }, 5000);
+        }
+        btn.disabled = false;
+        btn.innerText = '実績を送信する';
+      })
+      .withFailureHandler(function(error) {
+        msg.innerText = '通信エラーが発生しました。電波の良い場所でもう一度お試しください。';
+        msg.className = 'error';
+        btn.disabled = false;
+        btn.innerText = '実績を送信する';
+      })
+      .processForm(form);
+  }
+
+  updateSummary();
+</script>
+</body>
+</html>

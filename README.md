@@ -36,6 +36,16 @@
 
 詳細は [kpi-reporter/README.md](kpi-reporter/README.md) を参照。
 
+### 📱 sales-report-form
+
+現場スタッフがその場でスマホから接客実績を入力できる、Google Apps Script製の実績報告フォーム。
+
+- サーバー側でスタッフ名・獲得項目をホワイトリスト検証し、不正入力を防止
+- 同時送信の競合をLockServiceで防止、報告者を自動記録
+- kpi-reporterと組み合わせて「入力→蓄積→週次集計→自動送信」を一気通貫で自動化
+
+詳細は [sales-report-form/README.md](sales-report-form/README.md) を参照。
+
 ### 🗺️ tokyo-art-events
 
 東京都内の美術館の展覧会情報を自動収集し、地図付きで一覧できる公開Webサイト。

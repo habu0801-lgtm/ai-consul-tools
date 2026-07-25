@@ -57,6 +57,17 @@
 公開サイト: https://tokyo-art-events.vercel.app
 詳細は [tokyo-art-events/README.md](tokyo-art-events/README.md) を参照。
 
+### 📰 ai-news-line-bot
+
+AI業界の最新情報を複数の信頼できるソースから自動収集し、日本語に翻訳してLINEに毎朝配信するGoogle Apps Scriptツール。
+
+- OpenAI・Google DeepMind公式ブログ、Hacker News、Reddit、ITmedia AI+、Ledge.aiなど10ソースを横断収集
+- 英語タイトルは自動で日本語に翻訳
+- RSS/Atom両対応の共通パーサー、レート制限・一時的な取得失敗へのリトライ機構を実装
+- 時間主導型トリガーで毎朝7:00(JST)に自動実行
+
+詳細は [ai-news-line-bot/README.md](ai-news-line-bot/README.md) を参照。
+
 ## 対象
 
 - 会議録作成・共有に時間がかかっている方

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Research Channel</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { display: flex; height: 100vh; font-family: -apple-system, "Segoe UI", sans-serif; background: #1a1d21; color: #d1d2d3; }
+
+/* ── サイドバー ── */
+#sidebar {
+  width: 240px; min-width: 240px;
+  background: #19171d;
+  display: flex; flex-direction: column;
+  border-right: 1px solid #2d2d2d;
+}
+#sidebar h1 { font-size: 15px; font-weight: 700; color: #fff; padding: 18px 16px 6px; }
+#sidebar .workspace { font-size: 12px; color: #aaa; padding: 0 16px 14px; border-bottom: 1px solid #2d2d2d; }
+.sidebar-section { padding: 16px 16px 4px; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: .08em; }
+.channel-item {
+  padding: 4px 16px; font-size: 14px; cursor: pointer; border-radius: 4px; margin: 1px 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.channel-item:hover { background: #26282c; }
+.channel-item.active { background: #1164a3; color: #fff; }
+#report-list { flex: 1; overflow-y: auto; }
+.report-item {
+  padding: 6px 16px; font-size: 12px; color: #aaa; cursor: pointer;
+  border-radius: 4px; margin: 1px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.report-item:hover { background: #26282c; color: #fff; }
+
+/* ── メインエリア ── */
+#main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* チャンネルヘッダー */
+#channel-header {
+  padding: 12px 20px; border-bottom: 1px solid #2d2d2d;
+  display: flex; align-items: center; gap: 10px;
+  background: #1a1d21;
+}
+#channel-header .ch-name { font-weight: 700; font-size: 15px; color: #fff; }
+#channel-header .ch-desc { font-size: 13px; color: #888; }
+
+/* メッセージエリア */
+#messages {
+  flex: 1; overflow-y: auto; padding: 20px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.msg-group { display: flex; gap: 10px; padding: 4px 0; margin-bottom: 2px; }
+.msg-group:hover { background: #222529; border-radius: 6px; padding-left: 6px; margin-left: -6px; }
+
+.avatar {
+  width: 36px; height: 36px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0; margin-top: 2px;
+}
+.av-web       { background: #0e7490; }
+.av-youtube   { background: #991b1b; }
+.av-wikipedia { background: #1e40af; }
+.av-reddit    { background: #b45309; }
+.av-trends    { background: #065f46; }
+.av-synthesizer { background: #92400e; }
+.av-system    { background: #374151; }
+
+.msg-body { flex: 1; min-width: 0; }
+.msg-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+.msg-name   { font-weight: 700; font-size: 14px; }
+.msg-time   { font-size: 11px; color: #666; }
+
+.col-web         { color: #22d3ee; }
+.col-youtube     { color: #f87171; }
+.col-wikipedia   { color: #60a5fa; }
+.col-reddit      { color: #fb923c; }
+.col-trends      { color: #34d399; }
+.col-synthesizer { color: #fbbf24; }
+.col-system      { color: #6b7280; }
+
+.msg-text { font-size: 14px; line-height: 1.6; color: #d1d2d3; word-break: break-word; }
+.msg-text strong { color: #fff; }
+
+/* データカード */
+.data-card {
+  background: #222529; border: 1px solid #2d2d2d; border-left: 3px solid #444;
+  border-radius: 4px; padding: 10px 14px; margin-top: 6px; font-size: 13px;
+}
+.data-card.web-card       { border-left-color: #22d3ee; }
+.data-card.youtube-card   { border-left-color: #f87171; }
+.data-card.wikipedia-card { border-left-color: #60a5fa; }
+
+.data-card .card-title { font-weight: 600; margin-bottom: 6px; color: #fff; font-size: 13px; }
+.data-item { padding: 3px 0; color: #aaa; }
+.data-item a { color: #60a5fa; text-decoration: none; }
+.data-item a:hover { text-decoration: underline; }
+.views-badge { background: #2d2d2d; border-radius: 10px; padding: 1px 7px; font-size: 11px; color: #888; margin-left: 6px; }
+
+/* 入力エリア */
+#input-area {
+  padding: 12px 20px 16px;
+  border-top: 1px solid #2d2d2d;
+  background: #1a1d21;
+}
+#input-wrap {
+  display: flex; gap: 8px; align-items: center;
+  background: #222529; border: 1px solid #3d3d3d; border-radius: 8px;
+  padding: 8px 12px;
+}
+#query-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: #d1d2d3; font-size: 14px;
+}
+#query-input::placeholder { color: #555; }
+#send-btn {
+  background: #1164a3; color: #fff; border: none; border-radius: 6px;
+  padding: 6px 14px; font-size: 13px; cursor: pointer; font-weight: 600;
+}
+#send-btn:hover { background: #0f52a0; }
+#send-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
+
+/* タイピングインジケーター */
+.typing-indicator {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 0 4px 46px; font-size: 13px; color: #888;
+}
+.dots span {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: #666; margin: 0 2px;
+  animation: bounce 1.2s infinite;
+}
+.dots span:nth-child(2) { animation-delay: .2s; }
+.dots span:nth-child(3) { animation-delay: .4s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: .5; }
+  40% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* 区切り線 */
+.divider { display: flex; align-items: center; gap: 10px; margin: 12px 0; color: #555; font-size: 12px; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #2d2d2d; }
+
+/* スクロールバー */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3d3d3d; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- サイドバー -->
+<div id="sidebar">
+  <h1>🔬 Research Hub</h1>
+  <div class="workspace">4エージェント並列調査</div>
+
+  <div class="sidebar-section">チャンネル</div>
+  <div class="channel-item active">🔍 research-channel</div>
+
+  <div class="sidebar-section">過去のレポート</div>
+  <div id="report-list">
+    <div class="report-item" style="color:#555;">読み込み中...</div>
+  </div>
+</div>
+
+<!-- メインエリア -->
+<div id="main">
+  <div id="channel-header">
+    <span class="ch-name"># research-channel</span>
+    <span class="ch-desc">4エージェントが並列で調査します</span>
+  </div>
+
+  <div id="messages">
+    <div class="divider">今日</div>
+    <div class="msg-group">
+      <div class="avatar av-system">⚙️</div>
+      <div class="msg-body">
+        <div class="msg-header">
+          <span class="msg-name col-system">SYSTEM</span>
+          <span class="msg-time">起動完了</span>
+        </div>
+        <div class="msg-text">下の入力欄に調査したいテーマを入力してください 🚀</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="input-area">
+    <div id="input-wrap">
+      <input id="query-input" type="text" placeholder="調査テーマを入力… (例: iPhone 17 最新情報)" />
+      <button id="send-btn" onclick="startResearch()">調査開始 🔍</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const AGENT_META = {
+  web:         { name: "🌐 Web調査員",       cls: "web",         avClass: "av-web" },
+  youtube:     { name: "📺 YouTube調査員",    cls: "youtube",     avClass: "av-youtube" },
+  wikipedia:   { name: "📖 Wikipedia調査員",  cls: "wikipedia",   avClass: "av-wikipedia" },
+  reddit:      { name: "📱 Reddit調査員",      cls: "reddit",      avClass: "av-reddit" },
+  trends:      { name: "📈 トレンド調査員",    cls: "trends",      avClass: "av-trends" },
+  synthesizer: { name: "🧠 AI統括",           cls: "synthesizer", avClass: "av-synthesizer" },
+  system:      { name: "⚙️ SYSTEM",           cls: "system",      avClass: "av-system" },
+};
+
+function now() {
+  return new Date().toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" });
+}
+
+function addDivider(text) {
+  const el = document.createElement("div");
+  el.className = "divider";
+  el.textContent = text;
+  document.getElementById("messages").appendChild(el);
+  scrollBottom();
+}
+
+function addMessage(agentId, lines, cardHtml = "") {
+  const m = AGENT_META[agentId] || AGENT_META.system;
+  const msgs = document.getElementById("messages");
+
+  // タイピング表示を消す
+  removeTyping();
+
+  const group = document.createElement("div");
+  group.className = "msg-group";
+  group.innerHTML = `
+    <div class="avatar ${m.avClass}">${m.name.split(" ")[0]}</div>
+    <div class="msg-body">
+      <div class="msg-header">
+        <span class="msg-name col-${m.cls}">${m.name}</span>
+        <span class="msg-time">${now()}</span>
+      </div>
+      <div class="msg-text">${lines.map(escHtml).join("<br>")}</div>
+      ${cardHtml}
+    </div>`;
+  msgs.appendChild(group);
+  scrollBottom();
+}
+
+function showTyping(agentId) {
+  removeTyping();
+  const m = AGENT_META[agentId] || AGENT_META.system;
+  const el = document.createElement("div");
+  el.id = "typing-indicator";
+  el.className = "typing-indicator";
+  el.innerHTML = `<span class="col-${m.cls}" style="font-size:13px">${m.name} が入力中</span>
+    <div class="dots"><span></span><span></span><span></span></div>`;
+  document.getElementById("messages").appendChild(el);
+  scrollBottom();
+}
+
+function removeTyping() {
+  const el = document.getElementById("typing-indicator");
+  if (el) el.remove();
+}
+
+function scrollBottom() {
+  const msgs = document.getElementById("messages");
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>");
+}
+
+function buildWebCard(articles) {
+  if (!articles || !articles.length) return "";
+  const items = articles.slice(0,5).map(a =>
+    `<div class="data-item">📄 <a href="${a.url}" target="_blank">${escHtml(a.title.slice(0,50))}</a>
+      <span style="color:#666;font-size:12px"> — ${escHtml(a.site)}</span>
+      ${a.summary ? `<div style="color:#777;font-size:12px;margin-top:2px">${escHtml(a.summary.slice(0,80))}...</div>` : ""}
+    </div>`).join("");
+  return `<div class="data-card web-card"><div class="card-title">📎 取得記事</div>${items}</div>`;
+}
+
+function buildYouTubeCard(videos) {
+  if (!videos || !videos.length) return "";
+  const items = videos.slice(0,5).map(v =>
+    `<div class="data-item">🎬 <a href="https://youtube.com/watch?v=${v.video_id}" target="_blank">${escHtml(v.title.slice(0,45))}</a>
+      <span class="views-badge">👁 ${(v.views||0).toLocaleString()}</span>
+      <span style="color:#666;font-size:12px"> / ${escHtml(v.channel)}</span>
+    </div>`).join("");
+  return `<div class="data-card youtube-card"><div class="card-title">🎬 取得動画</div>${items}</div>`;
+}
+
+function buildWikiCard(articles) {
+  if (!articles || !articles.length) return "";
+  const items = articles.slice(0,4).map(a =>
+    `<div class="data-item">📖 <a href="${a.url}" target="_blank">${escHtml(a.title)}</a>
+      ${a.snippet ? `<span style="color:#666;font-size:12px"> — ${escHtml(a.snippet.slice(0,60))}...</span>` : ""}
+    </div>`).join("");
+  return `<div class="data-card wikipedia-card"><div class="card-title">📚 関連記事</div>${items}</div>`;
+}
+
+function buildRedditCard(posts) {
+  if (!posts || !posts.length) return "";
+  const items = posts.slice(0,5).map(p =>
+    `<div class="data-item">🔶 <a href="${p.url}" target="_blank">${escHtml(p.title.slice(0,60))}</a>
+      <span style="color:#666;font-size:12px"> ${escHtml(p.subreddit)} 👍${p.score} 💬${p.num_comments}</span>
+    </div>`).join("");
+  return `<div class="data-card" style="border-left-color:#fb923c"><div class="card-title">📱 Reddit投稿</div>${items}</div>`;
+}
+
+// ── 調査実行 ──
+function startResearch() {
+  const q = document.getElementById("query-input").value.trim();
+  if (!q) return;
+
+  document.getElementById("send-btn").disabled = true;
+  document.getElementById("query-input").disabled = true;
+
+  addDivider(`🔍 「${q}」の調査`);
+  addMessage("system", [`4エージェントが「${q}」を並列調査します...`]);
+  addMessage("synthesizer", ["みなさん、担当分野の調査をお願いします！結果が出た順に報告してください 🙌"]);
+
+  const es = new EventSource(`/research?q=${encodeURIComponent(q)}`);
+
+  es.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+
+    if (data.type === "typing") {
+      showTyping(data.agent);
+
+    } else if (data.type === "result") {
+      let card = "";
+      if (data.agent === "web")       card = buildWebCard(data.articles);
+      if (data.agent === "youtube")   card = buildYouTubeCard(data.videos);
+      if (data.agent === "wikipedia") card = buildWikiCard(data.articles);
+      if (data.agent === "reddit")    card = buildRedditCard(data.posts);
+      addMessage(data.agent, data.lines, card);
+
+    } else if (data.type === "subquery") {
+      // 深掘りサブクエリをsynthesizerのメッセージとして表示
+      const qlist = data.queries.map(q => `🔍 「${q}」`).join("　");
+      addMessage("synthesizer", ["深掘りクエリを生成しました：", qlist]);
+
+    } else if (data.type === "divider") {
+      addDivider(data.text);
+
+    } else if (data.type === "chat") {
+      showTyping(data.agent);
+      setTimeout(() => addMessage(data.agent, [data.text]), 800);
+
+    } else if (data.type === "done") {
+      removeTyping();
+      es.close();
+      document.getElementById("send-btn").disabled = false;
+      document.getElementById("query-input").disabled = false;
+      document.getElementById("query-input").value = "";
+      loadReports();
+    }
+  };
+
+  es.onerror = () => {
+    removeTyping();
+    es.close();
+    document.getElementById("send-btn").disabled = false;
+    document.getElementById("query-input").disabled = false;
+  };
+}
+
+// ── レポート一覧 ──
+function loadReports() {
+  fetch("/reports").then(r => r.json()).then(data => {
+    const el = document.getElementById("report-list");
+    if (!data.length) { el.innerHTML = '<div class="report-item" style="color:#555">まだありません</div>'; return; }
+    el.innerHTML = data.map(r =>
+      `<div class="report-item" onclick="viewReport('${r.file}')" title="${r.query}">
+        📄 ${r.query.slice(0,22)}${r.query.length>22?"…":""}<br>
+        <span style="font-size:10px;color:#555">${r.date}</span>
+      </div>`).join("");
+  });
+}
+
+function viewReport(file) {
+  window.open(`/report/${file}`, "_blank");
+}
+
+// Enterキー対応（IME変換中は無視）
+document.getElementById("query-input").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing) startResearch();
+});
+
+loadReports();
+</script>
+</body>
+</html>

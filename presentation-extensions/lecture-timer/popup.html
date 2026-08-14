@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lecture Timer</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="label">WORK SESSION</span>
+    </header>
+
+    <div class="ring-wrapper">
+      <svg class="ring" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle class="ring-bg" cx="100" cy="100" r="88" />
+        <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="88" />
+      </svg>
+      <div class="time-display">
+        <span id="timeDisplay">25:00</span>
+        <span class="status-label" id="statusLabel">READY</span>
+      </div>
+    </div>
+
+    <div class="presets">
+      <button class="preset-btn" data-minutes="5">5m</button>
+      <button class="preset-btn" data-minutes="10">10m</button>
+      <button class="preset-btn active" data-minutes="25">25m</button>
+      <button class="preset-btn" data-minutes="30">30m</button>
+      <button class="preset-btn" data-minutes="45">45m</button>
+    </div>
+
+    <div class="custom-input-row">
+      <input type="number" id="customMinutes" placeholder="Custom" min="1" max="180" />
+      <span class="unit">min</span>
+      <button id="setCustom">SET</button>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl-btn" id="resetBtn" title="Reset">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="1 4 1 10 7 10"/>
+          <path d="M3.51 15a9 9 0 1 0 .49-4.96"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn primary" id="startBtn" title="Start / Pause">
+        <svg id="iconPlay" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5,3 19,12 5,21"/>
+        </svg>
+        <svg id="iconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <rect x="6" y="4" width="4" height="16"/>
+          <rect x="14" y="4" width="4" height="16"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn" id="fullscreenBtn" title="Open fullscreen view">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15 3 21 3 21 9"/>
+          <polyline points="9 21 3 21 3 15"/>
+          <line x1="21" y1="3" x2="14" y2="10"/>
+          <line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

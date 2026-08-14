@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lecture Timer — Fullscreen</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;700&family=JetBrains+Mono:wght@700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --surface2: #1e2330;
+      --border: #2a2f3d;
+      --accent: #4f8ef7;
+      --accent-glow: rgba(79,142,247,0.3);
+      --accent-warn: #f7954f;
+      --accent-done: #4ff7a0;
+      --text-primary: #eef0f6;
+      --text-secondary: #6b738a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      user-select: none;
+    }
+
+    .label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      color: var(--text-secondary);
+    }
+
+    .ring-wrapper {
+      position: relative;
+      width: min(60vw, 60vh);
+      height: min(60vw, 60vh);
+    }
+
+    .ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+    .ring-bg { fill: none; stroke: var(--surface2); stroke-width: 6; }
+
+    .ring-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 553;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.4s ease;
+      filter: drop-shadow(0 0 12px var(--accent-glow));
+    }
+
+    .ring-progress.warn {
+      stroke: var(--accent-warn);
+      filter: drop-shadow(0 0 12px rgba(247,149,79,0.4));
+    }
+
+    .ring-progress.done {
+      stroke: var(--accent-done);
+      filter: drop-shadow(0 0 16px rgba(79,247,160,0.5));
+    }
+
+    .time-display {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    #timeDisplay {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(48px, 10vw, 120px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    #statusLabel {
+      font-size: clamp(10px, 1.2vw, 16px);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--text-secondary);
+    }
+
+    .controls {
+      display: flex;
+      gap: 20px;
+    }
+
+    .ctrl-btn {
+      background: #161922;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .ctrl-btn svg { width: 22px; height: 22px; }
+
+    .ctrl-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+
+    .ctrl-btn.primary {
+      width: 72px;
+      height: 72px;
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+
+    .ctrl-btn.primary svg { width: 28px; height: 28px; }
+    .ctrl-btn.primary:hover { background: #6ba3f9; }
+
+    body.done #timeDisplay { color: var(--accent-done); }
+    body.done .ctrl-btn.primary { background: var(--accent-done); border-color: var(--accent-done); }
+  </style>
+</head>
+<body>
+  <span class="label">WORK SESSION</span>
+
+  <div class="ring-wrapper">
+    <svg class="ring" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle class="ring-bg" cx="100" cy="100" r="88"/>
+      <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="88"/>
+    </svg>
+    <div class="time-display">
+      <span id="timeDisplay">25:00</span>
+      <span id="statusLabel">READY</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn" id="resetBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="1 4 1 10 7 10"/>
+        <path d="M3.51 15a9 9 0 1 0 .49-4.96"/>
+      </svg>
+    </button>
+    <button class="ctrl-btn primary" id="startBtn">
+      <svg id="iconPlay" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5,3 19,12 5,21"/>
+      </svg>
+      <svg id="iconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <rect x="6" y="4" width="4" height="16"/>
+        <rect x="14" y="4" width="4" height="16"/>
+      </svg>
+    </button>
+  </div>
+
+  <script src="fullscreen.js"></script>
+</body>
+</html>

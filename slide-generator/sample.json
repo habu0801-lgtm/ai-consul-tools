@@ -1,0 +1,75 @@
+{
+  "title": "仕事で使うAI実践講座",
+  "subtitle": "議事録・文書作成・情報整理がラクになる",
+  "date": "2026年5月",
+  "speaker": "くらし×AI活用の会",
+  "slides": [
+    {
+      "type": "agenda",
+      "title": "今日の流れ",
+      "items": [
+        { "label": "AIツールの使い分け",       "time": "15分", "sub": "ChatGPT / Gemini / Claude / Perplexity" },
+        { "label": "情報収集→整理→文章化",     "time": "20分", "sub": "Perplexity → ChatGPT → Claude の型" },
+        { "label": "音声から議事録を作る",      "time": "15分", "sub": "NotebookLM × Gemini" },
+        { "label": "AIでスライドを作る",        "time": "10分", "sub": "Gemini Canvas" }
+      ]
+    },
+    {
+      "type": "section",
+      "num": "01",
+      "category": "Tool Guide",
+      "title": "AIツールの使い分け",
+      "subtitle": "ChatGPT・Gemini・Claude・Perplexity — それぞれの得意なこと"
+    },
+    {
+      "type": "content",
+      "num": "02",
+      "category": "Tool Guide",
+      "title": "4つのAIツール、使い分けの基本",
+      "bullets": [
+        { "text": "ChatGPT — 汎用。文章作成・要約・アイデア出しに強い",   "sub": "GPT-4o。最も幅広く使われる定番ツール" },
+        { "text": "Gemini — Google連携。Gmailやドライブと組み合わせて使う", "sub": "GoogleアカウントでそのままログインOK" },
+        { "text": "Claude — 長文読解・丁寧な文章に強い",                    "sub": "プライバシーポリシーが厳格で安心" },
+        { "text": "Perplexity — リアルタイム検索。今の情報を調べるならここ", "sub": "ソース付きで回答。ハルシネーションが少ない" }
+      ],
+      "note": "録画を見返しながら、ご自身の業務に合うツールを試してみてください。"
+    },
+    {
+      "type": "two-column",
+      "num": "03",
+      "category": "Comparison",
+      "title": "AIを使う前 / 使った後",
+      "left": {
+        "header": "BEFORE — 使う前",
+        "body": "・毎回ゼロから文章を書く\n・検索→コピペを繰り返す\n・議事録に30分かかる\n・情報が散らばったまま"
+      },
+      "right": {
+        "header": "AFTER — 使った後",
+        "body": "・下書きを5分で作れる\n・最新情報を即座に収集\n・議事録が自動で完成\n・情報を資産として蓄積"
+      }
+    },
+    {
+      "type": "table",
+      "num": "04",
+      "category": "Reference",
+      "title": "業種別プロンプト例（Perplexity → Claude）",
+      "headers": ["業種", "Perplexityで検索", "Claudeへの指示"],
+      "rows": [
+        ["不動産",     "「不動産業界でAI活用している事例を教えて」",         "「この内容をもとに顧客向けお知らせ文を書いて」"],
+        ["デザイン",   "「デザイン会社がAIで制作効率化している事例を教えて」", "「クライアントへのAI活用ご案内文を書いて」"],
+        ["現場系",     "「建設現場でAIを安全管理に活かす事例を教えて」",       "「現場スタッフ向けにAI導入メリットを伝えて」"],
+        ["会社員",     "「事務業務でAIを活用して効率化する事例を教えて」",     "「社内向けAI活用を促す案内メールを書いて」"]
+      ]
+    },
+    {
+      "type": "summary",
+      "title": "今日覚えた型",
+      "points": [
+        "情報収集は Perplexity　→　整理は ChatGPT　→　文章化は Claude",
+        "音声ファイルを NotebookLM に投げると議事録が自動完成",
+        "Gemini Canvas でスライドの下書きをゼロから作れる"
+      ],
+      "closing": "明日から1つだけ試してみてください"
+    }
+  ]
+}

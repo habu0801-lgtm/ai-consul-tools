@@ -1,0 +1,57 @@
+/* Hide the real cursor while laser is active */
+.__laser_active__ *,
+.__laser_active__ {
+  cursor: none !important;
+}
+
+#__laser_pointer__ {
+  --lp-primary: #ff2020;
+  --lp-glow:    rgba(255, 32, 32, 0.6);
+  --lp-inner:   rgba(255, 200, 200, 0.9);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2147483647;
+  will-change: transform;
+
+  /* Outer glow ring */
+  background: transparent;
+  border: 2.5px solid var(--lp-primary);
+  box-shadow:
+    0 0 0   4px var(--lp-glow),
+    0 0 12px 6px var(--lp-glow),
+    0 0 24px 10px rgba(0, 0, 0, 0.15),
+    inset 0 0 6px 2px var(--lp-glow);
+
+  animation: __lp_pulse__ 1.2s ease-in-out infinite;
+}
+
+/* Inner bright dot */
+#__laser_pointer__::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--lp-inner);
+  box-shadow:
+    0 0 4px 3px var(--lp-primary),
+    0 0 8px 4px var(--lp-glow);
+}
+
+@keyframes __lp_pulse__ {
+  0%   { box-shadow: 0 0 0 4px var(--lp-glow), 0 0 12px  6px var(--lp-glow), 0 0 24px 10px rgba(0,0,0,0.15), inset 0 0 6px 2px var(--lp-glow); }
+  50%  { box-shadow: 0 0 0 7px var(--lp-glow), 0 0 18px 10px var(--lp-glow), 0 0 32px 14px rgba(0,0,0,0.10), inset 0 0 8px 3px var(--lp-glow); }
+  100% { box-shadow: 0 0 0 4px var(--lp-glow), 0 0 12px  6px var(--lp-glow), 0 0 24px 10px rgba(0,0,0,0.15), inset 0 0 6px 2px var(--lp-glow); }
+}

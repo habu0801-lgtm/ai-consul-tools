@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laser Pointer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <span class="title">Laser Pointer</span>
+    <label class="toggle-wrap" title="ON / OFF">
+      <input type="checkbox" id="toggle">
+      <span class="toggle-track">
+        <span class="toggle-thumb"></span>
+      </span>
+    </label>
+  </div>
+
+  <p class="label">カラーを選択</p>
+
+  <div class="color-grid" id="colorGrid">
+    <button class="color-btn" data-color="red"    title="レッド">
+      <span class="swatch"></span>
+      <span class="name">レッド</span>
+    </button>
+    <button class="color-btn" data-color="blue"   title="ブルー">
+      <span class="swatch"></span>
+      <span class="name">ブルー</span>
+    </button>
+    <button class="color-btn" data-color="green"  title="グリーン">
+      <span class="swatch"></span>
+      <span class="name">グリーン</span>
+    </button>
+    <button class="color-btn" data-color="yellow" title="イエロー">
+      <span class="swatch"></span>
+      <span class="name">イエロー</span>
+    </button>
+    <button class="color-btn" data-color="purple" title="パープル">
+      <span class="swatch"></span>
+      <span class="name">パープル</span>
+    </button>
+  </div>
+
+  <p class="hint" id="hint">オンにするとカーソルがレーザーポインターに変わります</p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

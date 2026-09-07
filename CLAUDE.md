@@ -1,56 +1,104 @@
-# meeting-bot プロジェクト概要
+# ai-consul-tools — リポジトリ概要
 
-## このツールの目的
-会議音声ファイル（.m4a / .mp4）を自動で文字起こし・要約し、
-議事録をGoogle Chatに自動投稿するツール。
+AIコンサルタント・土生（SHIROJI）の**公開ポートフォリオリポジトリ**。
+実際に構築・運用しているツール13件を、ソースまたは事例紹介として公開している。
 
-## リポジトリ
 - GitHub: https://github.com/habu0801-lgtm/ai-consul-tools
-- ローカル: ~/meeting-bot/
+- ローカル: `~/ai-consul-tools/`
+- 公開範囲: **Public**（誰でも閲覧可能）
 
-## ファイル構成
+## ⚠️ 最重要：公開してよい情報の線引き
+
+**このリポジトリはPublicである。** 変更をコミットする前に、必ず下記を確認すること。
+
+### 絶対に載せないもの
+
+| 分類 | 具体例 |
+|---|---|
+| **クライアントの経営数値** | 原価率・仕入れ単価・損益額・ロス額・出数・利益率 |
+| **個人情報** | スタッフの実名、連絡先 |
+| **認証情報** | APIキー、トークン、スプレッドシートURL、Webhook URL |
+
+**経営数値はデフォルトで非公開。** これは禁止ではなく初期値であり、
+クライアントから能動的に「実績として数字ごと使ってほしい」と申し出があり、
+公開範囲を**書面で**確認できた場合に限り、その案件について解禁しうる。
+危ないのは「たぶん大丈夫だろう」でこちらから出しにいくこと。
+
+### 載せてよいもの
+
+- **クライアントが自分で公開している情報**（店名・電話・住所・営業時間・メニュー価格・外観写真）
+  → ただし**書面で**許可を取ること。口頭の「いいよ」は商談での提示が前提のことが多い
+- **受託側の工数**（作業時間の削減実績など）は社内情報に当たらないため公開可
+- 設計判断・踏んだバグ・技術的な試行錯誤（**ポートフォリオの価値はここにある**）
+
+### 匿名化についての注意
+
+**匿名化は「名前を伏せること」ではない。**
+同じリポジトリ内に特定できる材料（画像・URL・固有名詞）が1つでもあれば、
+匿名の数値がそれに紐づいて破綻する。実際に2026-09-05、匿名の経営数値と
+店名入りLP画像が同居している状態を作ってしまい、履歴ごと作り直す羽目になった。
+
+判断基準の詳細はObsidian `2_メモ/ビジネス/クライアント情報を公開リポジトリに出すときの線引き.md`。
+
+### git履歴について
+
+**ファイルを消しても過去のコミットには残る。** 機密情報をpushしてしまった場合、
+新しいコミットで削除しても公開は取り消せない。force pushでも旧SHAで取得できる。
+手順はObsidian `2_メモ/Git履歴から機密情報を完全に削除する手順.md` を参照。
+
+**つまり、コミット前の確認がすべて。** 後から消せると思わないこと。
+
+## ディレクトリ構成
+
 ```
-~/meeting-bot/
-├── app.py          Streamlit UI（アップロード・確認・投稿）
-├── transcribe.py   文字起こし・要約・Google Chat投稿のコアロジック
-├── watch.py        フォルダ監視による完全自動化
-├── .env            APIキー（Gitに含めない）
-└── meeting-bot/    サブディレクトリ（READMEなど）
+ai-consul-tools/
+├── README.md                  トップページ（ツール一覧＋主な事例）
+├── docs/                      トップページ用の画像
+│
+├── meeting-bot/               会議音声→議事録→Google Chat投稿（Python）
+├── shift-scheduler/           月次シフト自動生成（GAS本番＋Streamlit試作）
+├── kpi-reporter/              週次売上の自動集計・送信（GAS）
+├── sales-report-form/         スタッフ実績のスマホ入力フォーム（GAS）
+├── ai-news-line-bot/          AIニュースを毎朝LINE配信（GAS）
+├── research-agent/            5エージェント並列リサーチ（Python/Flask）
+├── local-transcriber/         ローカル文字起こし（faster-whisper）
+├── slide-generator/           JSON→PPTX自動生成（Node.js）
+├── presentation-extensions/   登壇用Chrome拡張2種（MV3）
+├── video-production/          動画制作の事例紹介（READMEのみ）
+├── tokyo-art-events/          展覧会情報サイトの事例紹介（READMEのみ）
+├── cost-management-tool/      原価管理ツールの事例紹介（READMEのみ・匿名化）
+└── landing-page/              店舗LP制作の事例紹介（READMEのみ）
 ```
 
-## 技術スタック
-- **文字起こし**: OpenAI Whisper API
-- **要約・議事録生成**: Claude AI（または GPT）
-- **投稿先**: Google Chat Webhook
-- **UI**: Streamlit
-- **自動化**: watch.py でフォルダ監視→自動処理
+### ソース公開の有無
 
-## 使い方（2パターン）
-### 手動（Streamlit UI）
-```bash
-cd ~/meeting-bot
-streamlit run app.py
-```
-→ ブラウザで音声ファイルをアップロードして処理
+| 種別 | 対象 |
+|---|---|
+| **ソースあり** | meeting-bot / kpi-reporter / sales-report-form / ai-news-line-bot / research-agent / local-transcriber / slide-generator / presentation-extensions / shift-scheduler（Streamlit試作のみ） |
+| **READMEのみ** | video-production / tokyo-art-events / cost-management-tool / landing-page / shift-scheduler（GAS本番） |
 
-### 自動（フォルダ監視）
-```bash
-python watch.py
-```
-→ 音声ファイルを所定フォルダに入れると自動処理・投稿
+READMEのみの4件は、クライアント情報を含む・ソースが別リポジトリ／クラウド上にある、
+などの理由で意図的にソースを置いていない。**勝手に追加しないこと。**
 
-## 環境変数（.env）
-```
-OPENAI_API_KEY=xxx
-GOOGLE_CHAT_WEBHOOK_URL=xxx
-```
+## 各READMEの書き方（トーン）
 
-## 開発ルール
-- APIキーは必ず .env 経由で管理（Gitに含めない）
-- 音声ファイル（.m4a, .mp4）は .gitignore で除外済み
-- Python 3.11（/usr/local/bin/python3.11）を使用
+うまくいった結果だけでなく、**途中で設計を変えた理由や踏んだ地雷を残す**方針。
+これがこのリポジトリの差別化要素になっている。
 
-## 現状・課題
-- 基本機能は完成・運用中
-- Streamlit Cloud へのデプロイは未実施
-- 複数ファイルの一括処理は未対応
+- 数字を主役にしない（時短だけ書くと「◯分削減のツール」として安く見られる）
+- 未対応・残課題も明記する（限界を把握している人のほうが信用される）
+- 「なぜその判断をしたか」を書く（技術力より業務理解が評価される）
+
+## 作業ルール
+
+- **コミット前に必ず** `grep` で実名・APIキー・経営数値の混入を確認する
+- 画像を追加するときは、写り込んでいる文字（店名・電話番号・スタッフ名）を必ず目視で確認する
+- `.env` は `.gitignore` 済み。`.env.example` は例外的に追跡している（`!.env.example`）
+- 実データを再現したサンプル画像を作る場合は、**「実データではない」旨を画像内とREADME本文の両方に明記**する
+- ツールを追加・変更したらルートREADMEの一覧表も更新する
+
+## 関連するObsidianノート
+
+- `5_プロジェクト/AIツールポートフォリオ（ai-consul-tools）.md` — このリポジトリの更新履歴・意思決定ログ
+- `2_メモ/ビジネス/クライアント情報を公開リポジトリに出すときの線引き.md` — 公開判断の基準
+- `2_メモ/Git履歴から機密情報を完全に削除する手順.md` — 事故ったときの手順

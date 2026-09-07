@@ -1,6 +1,6 @@
 # ai-consul-tools — リポジトリ概要
 
-AIコンサルタント・土生（SHIROJI）の**公開ポートフォリオリポジトリ**。
+AIコンサルタント・土生 真大（SHIROJI）の**公開ポートフォリオリポジトリ**。
 実際に構築・運用しているツール13件を、ソースまたは事例紹介として公開している。
 
 - GitHub: https://github.com/habu0801-lgtm/ai-consul-tools

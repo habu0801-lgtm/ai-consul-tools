@@ -17,7 +17,7 @@ Excelの転記、シフト作成、報告書づくり。**毎回やっている�
 | ツール | 何を解決したか | 技術 | 状態 |
 |---|---|---|---|
 | [cost-management-tool](cost-management-tool/) | 原価が「なんとなく」だった状態を、毎月数字で出るように | スプレッドシート＋GAS | クライアント案件・運用中 |
-| [shift-scheduler](shift-scheduler/) | 属人化していた月次シフト作成を2〜3時間→30分に。店長がボタン操作で回せる形に | GAS / Sheets / Forms | 自社2店舗で運用中 |
+| [shift-scheduler](shift-scheduler/) | 属人化していた月次シフト作成を2〜3時間→30分に。店長がボタン操作で回せる形に | GAS / Sheets / Forms | 2店舗で運用中 |
 | [sales-report-form](sales-report-form/) | 現場の実績報告を、役職者が手で打ち直す作業をなくした | GAS | 運用中 |
 | [kpi-reporter](kpi-reporter/) | 週次の売上集計とレポート送信を自動化 | GAS | 運用中 |
 | [meeting-bot](meeting-bot/) | 会議音声から議事録を作り、チャットへ自動投稿 | Python / Whisper / Claude | 運用中 |
@@ -47,7 +47,7 @@ Excelの転記、シフト作成、報告書づくり。**毎回やっている�
 
 詳細 → [cost-management-tool/README.md](cost-management-tool/README.md)
 
-### シフト作成の自動化（自社・2店舗で運用中）
+### シフト作成の自動化（2店舗で運用中）
 
 ![シフト出力のBefore/After](shift-scheduler/docs/output-sample.png)
 

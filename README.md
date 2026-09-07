@@ -17,7 +17,7 @@ Excelの転記、シフト作成、報告書づくり。**毎回やっている�
 | ツール | 何を解決したか | 技術 | 状態 |
 |---|---|---|---|
 | [cost-management-tool](cost-management-tool/) | 原価が「なんとなく」だった状態を、毎月数字で出るように | スプレッドシート＋GAS | クライアント案件・運用中 |
-| [shift-scheduler](shift-scheduler/) | 属人化していた月次シフト作成を2〜3時間→30分に。店長がボタン操作で回せる形に | GAS / Sheets / Forms | 2店舗で運用中 |
+| [shift-scheduler](shift-scheduler/) | 属人化していた月次シフト作成を2〜3時間→30分に。店長がボタン操作で回せる形に | GAS / Sheets / Forms | 自社2店舗で運用中 |
 | [sales-report-form](sales-report-form/) | 現場の実績報告を、役職者が手で打ち直す作業をなくした | GAS | 運用中 |
 | [kpi-reporter](kpi-reporter/) | 週次の売上集計とレポート送信を自動化 | GAS | 運用中 |
 | [meeting-bot](meeting-bot/) | 会議音声から議事録を作り、チャットへ自動投稿 | Python / Whisper / Claude | 運用中 |
@@ -47,12 +47,13 @@ Excelの転記、シフト作成、報告書づくり。**毎回やっている�
 
 詳細 → [cost-management-tool/README.md](cost-management-tool/README.md)
 
-### シフト作成の自動化（飲食業・2店舗で稼働中）
+### シフト作成の自動化（自社・2店舗で運用中）
 
 ![シフト出力のBefore/After](shift-scheduler/docs/output-sample.png)
 
 毎月**2〜3時間**かかり、かつ**作成者の頭の中にルールがある**状態だった月次シフト作成を、
 Google Forms → スプレッドシート → GAS の流れで自動化しました。
+**自分が毎月やっていた業務を、自分で仕組みに変えたもの**です。
 
 - 作成時間が**2〜3時間 → 約30分**に
 - **非エンジニアの店長が、ボタン操作だけで**シフト案を生成できる状態に（作れる人が1人から増えた）

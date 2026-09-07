@@ -20,7 +20,7 @@ Excelの転記、シフト作成、報告書づくり。**毎回やっている�
 | [shift-scheduler](shift-scheduler/) | 属人化していた月次シフト作成を2〜3時間→30分に。店長がボタン操作で回せる形に | GAS / Sheets / Forms | 2店舗で運用中 |
 | [sales-report-form](sales-report-form/) | 現場の実績報告を、役職者が手で打ち直す作業をなくした | GAS | 運用中 |
 | [kpi-reporter](kpi-reporter/) | 週次の売上集計とレポート送信を自動化 | GAS | 運用中 |
-| [meeting-bot](meeting-bot/) | 会議音声から議事録を作り、チャットへ自動投稿 | Python / Whisper / Claude | 運用中 |
+| [meeting-bot](meeting-bot/) | 会議音声から議事録を作り、チャットへ自動投稿 | Python / Whisper / Claude | 開発済み・現在停止 |
 | [ai-news-line-bot](ai-news-line-bot/) | 10ソースのAIニュースを毎朝7時にLINEへ配信 | GAS | 毎日稼働中 |
 | [research-agent](research-agent/) | 5エージェント並列でWeb調査、本文まで読んで深掘り | Python | 運用中 |
 | [local-transcriber](local-transcriber/) | 音声の文字起こしを、外部送信なしでMac内で完結 | faster-whisper | 運用中 |
@@ -98,7 +98,7 @@ Google Forms → スプレッドシート → GAS の流れで自動化しまし
 
 ### 業務自動化
 
-- **[meeting-bot](meeting-bot/)** — 会議音声をWhisperで文字起こしし、Claudeで議事録・要約を生成してGoogle Chatへ自動投稿。処理済みファイルは自動アーカイブ
+- **[meeting-bot](meeting-bot/)** — 会議音声をWhisperで文字起こしし、Claudeで議事録・要約を生成してGoogle Chatへ自動投稿。処理済みファイルは自動アーカイブ。**現在は運用停止**（既製サービスで足りると判断した経緯をREADMEに記載）
 - **[sales-report-form](sales-report-form/)** — 現場スタッフがスマホから実績を入力するGAS製フォーム。ホワイトリスト検証で不正入力を防ぎ、LockServiceで同時送信の競合を回避。kpi-reporterと組み合わせて「入力→蓄積→集計→送信」を一気通貫に
 - **[kpi-reporter](kpi-reporter/)** — 週次の売上データを自動集計し、サマリーレポートを生成・送信するGASツール。時間主導型トリガーで自動実行
 

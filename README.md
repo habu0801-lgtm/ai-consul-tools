@@ -26,7 +26,7 @@ Excelの転記、シフト作成、報告書づくり。**毎回やっている�
 | [local-transcriber](local-transcriber/) | 音声の文字起こしを、外部送信なしでMac内で完結 | faster-whisper | 運用中 |
 | [slide-generator](slide-generator/) | 構成メモから、ブランド統一のPPTXを自動生成 | Node.js | 運用中 |
 | [video-production](video-production/) | 縦型の告知動画を、会話ベースで制作・納品 | Claude Code スキル | 納品実績あり |
-| [presentation-extensions](presentation-extensions/) | 登壇用のレーザーポインターとタイマー | Chrome拡張 (MV3) | 運用中 |
+| [presentation-extensions](presentation-extensions/) | 登壇用のレーザーポインターとタイマー | Chrome拡張 (MV3) | 実装済み |
 | [tokyo-art-events](tokyo-art-events/) | 14館の展覧会情報を毎日自動収集して公開 | GitHub Actions | [公開中](https://tokyo-art-events.vercel.app) |
 | [landing-page](landing-page/) | 店舗の情報が1枚にまとまっていない状態を解消 | HTML / CSS | クライアント案件・公開中 |
 
@@ -90,7 +90,7 @@ Google Forms → スプレッドシート → GAS の流れで自動化しまし
 - 満足度・分かりやすさともに**「満足以上」が100%**
 - 受講後、ほぼ全員が「すぐ使えそう」と回答
 
-講座の運営自体も、このリポジトリの [slide-generator](slide-generator/)・[presentation-extensions](presentation-extensions/)・[video-production](video-production/) で回しています。
+講座の運営自体も、このリポジトリの [slide-generator](slide-generator/)・[video-production](video-production/) で回しています（[presentation-extensions](presentation-extensions/) は実装済みで、講座での実績はまだ蓄積中です）。
 
 ---
 
@@ -112,7 +112,7 @@ Google Forms → スプレッドシート → GAS の流れで自動化しまし
 
 - **[slide-generator](slide-generator/)** — 構成メモをJSONで渡すだけでブランド統一のPPTXを生成。7種類のスライドタイプ、文字量に応じたフォントサイズ自動計算、`brand` の差し替えで企業向けにも転用可能
 - **[video-production](video-production/)** — Claude Codeのスキルスタック（video-use + HyperFrames）による会話ベースの動画制作。実例として20秒の縦型告知動画（1080×1920）を制作・納品（実写合成／カラーグレード／トランジション／BGM選定）
-- **[presentation-extensions](presentation-extensions/)** — 登壇用に自作したChrome拡張2種（Manifest V3）。iframe内のスライドでも動くレーザーポインターと、フルスクリーン対応のカウントダウンタイマー。外部通信なし・権限は最小限
+- **[presentation-extensions](presentation-extensions/)** — 登壇用に自作したChrome拡張2種（Manifest V3）。iframe内のスライドでも動くレーザーポインターと、フルスクリーン対応のカウントダウンタイマー。外部通信なし・権限は最小限。**基本機能は実装済み、講座での運用実績はまだ確認中**
 
 ### 公開Webサイト
 

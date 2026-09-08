@@ -40,4 +40,4 @@ Chrome拡張 Manifest V3 / content script / service worker / chrome.storage / ch
 
 ## 状態
 
-どちらも基本機能は実装済み。実際の講座で使いながら調整中です。
+どちらも実際の講座で使用中です。

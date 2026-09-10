@@ -41,3 +41,7 @@ Chrome拡張 Manifest V3 / content script / service worker / chrome.storage / ch
 ## 状態
 
 どちらも実際の講座で使用中です。
+
+---
+
+[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)

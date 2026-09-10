@@ -24,6 +24,7 @@
 ## 到達点
 
 **毎月2〜3時間かかっていたシフト作成が、約30分に。**
+時間は担当者による概算で、確認・手直しを含みます。店舗の条件や調整内容によって異なります。
 作業時間が1/4〜1/6になっただけでなく、**非エンジニアの店長がボタン操作だけで**シフト案を生成できる状態にしました。
 
 削減できた時間そのものより、**作成できる人が1人から増えたこと**のほうが効いています。
@@ -163,3 +164,7 @@ streamlit run shift_scheduler.py
 
 - **本番**: Google Apps Script / Google Sheets / Google Forms
 - **試作**: Python / Streamlit / pandas
+
+---
+
+[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)

@@ -52,3 +52,7 @@
 - Ledge.ai（日本語ニュース、有志の非公式フィード経由）
 
 Anthropic公式・Every.to・著名な個人Xアカウントは、公式RSSがない/API制約があるため今回は対象外。将来的に追加したくなったら相談してほしい。
+
+---
+
+[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)

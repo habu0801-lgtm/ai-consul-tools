@@ -99,3 +99,7 @@ research-agent/
 ## 状態
 
 運用中。Claude Codeのスラッシュコマンドから呼び出して日常的に使っています。
+
+---
+
+[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)

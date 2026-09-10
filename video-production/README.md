@@ -118,6 +118,10 @@ FFmpegコマンドを覚える必要がなく、「こうしたい」を話す�
 
 ---
 
-**制作者**: 土生 真大（はぶ まさひろ）／ SHIROJI  
+**制作者**: 土生 真大（はぶ まさひろ）／ Shiroji
 **制作日**: 2026年8月2日  
 **納品先**: くらし×AI活用の会（市民向けAI講座）
+
+---
+
+[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)

@@ -38,3 +38,7 @@ kpi-reporter/
 - メール送信に加えて、Google ChatやSlackへのWebhook通知に対応
 - 前週比・前年同週比などの比較指標の追加
 - スタッフ別の達成率（目標値に対する進捗）の可視化
+
+---
+
+[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)

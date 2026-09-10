@@ -56,3 +56,7 @@ GPUなしの実時間比 約1.3倍なので、「席を立っている間に終�
 ## 状態
 
 運用可能。音声メモ → 文字起こし → AIに投入、の日次フローに組み込み中。
+
+---
+
+[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)

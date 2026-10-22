@@ -62,11 +62,11 @@ HTML / CSS（店舗LPは単一ファイル）、静的ホスティング。JavaS
 
 - シフト作成の所要時間には「概算・確認と手直しを含む」と明記
 - 原価管理は現場展開後の調整段階として紹介し、未測定の効果を断定しない構成
-- [見積書作成デモ](https://shiroji.jp/#builders)は架空の入力例を使い、実際の導入事例と区別
-- [店舗LPの紹介](https://shiroji.jp/#about)は公式サイトの「私について」セクションに掲載
+- [見積書作成デモ](https://shiroji.jp/cases#builders)は架空の入力例を使い、実際の導入事例と区別
+- [店舗LPの紹介](https://shiroji.jp/cases#other-work)は公式サイトの「事例」ページに掲載
 
 相談者が業務改善の使い方と対応範囲を理解できる構成にしています。
 
 ---
 
-[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)
+[Shiroji公式サイト](https://shiroji.jp/) ・ [支援内容・料金](https://shiroji.jp/service#price) ・ [業務改善の無料相談](https://shiroji.jp/#contact)
